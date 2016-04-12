@@ -78,7 +78,7 @@ SampleFilter filter_samp;
 void setAnalogMultiplexCh(const uint8_t _pin_index)
 {
     // set switch to output (not sure why, but must be set everytime..)
-    //pinMode(PB2, OUTPUT);
+    pinMode(PB2, OUTPUT);
     pinMode(PB1, OUTPUT);
     pinMode(PB0, OUTPUT);
 
@@ -250,11 +250,14 @@ void loop()
 
     //wait_for_tick();
     ///ms = millis();
-  value = TeenyTouchDusjagr.sense(PB4,PB3, 29 );
+    ///
+  setAnalogMultiplexCh(2);
+
+  value = TeenyTouchDusjagr.sense(PB4,PB3, 1 );
   SampleFilter_put(&filter_samp, value);
 
   //value = filterx.step(TeenyTouchDusjagr.sense(PB4,PB3, 29 ));
-  TeenyMidi.delay(5);
+  TeenyMidi.delay(8);
 
 
    //TeenyMidi.sendCCHires(value, 1);

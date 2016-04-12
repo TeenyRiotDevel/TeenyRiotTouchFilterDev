@@ -6,7 +6,7 @@
 FIR filter designed with
  http://t-filter.appspot.com
 
-sampling frequency: 200 Hz
+sampling frequency: 125 Hz
 
 fixed point precision: 10 bits
 
@@ -15,14 +15,14 @@ fixed point precision: 10 bits
   desired ripple = 5 dB
   actual ripple = n/a
 
-* 15 Hz - 100 Hz
+* 15 Hz - 60 Hz
   gain = 0
   desired attenuation = -40 dB
   actual attenuation = n/a
 
 */
 
-#define SAMPLEFILTER_TAP_NUM 33
+#define SAMPLEFILTER_TAP_NUM 15
 
 typedef struct {
   int history[SAMPLEFILTER_TAP_NUM];
