@@ -22,8 +22,11 @@ MIDIMessage midimsg;
 //
 
 int value[8] = {0,0,0,0,0,0,0,0};
-//int prevValue = 0;
-//int velocityValue = 0;
+//int prevValue[8] = {0,0,0,0,0,0,0,0};
+//int velocityValue[8] = {0,0,0,0,0,0,0,0};
+
+uint8_t note_off[8] = {1,1,1,1,1,1,1,1};
+
 uint16_t offset_adc[8] = {0,0,0,0,0,0,0,0};
 SampleFilter filter_samp[8];
 
@@ -93,9 +96,32 @@ void loop()
 
     if (millis()-previousMillis >= 16)  {  // 0% data loss
         //TeenyMidi.sendCCHires(value, 1);
+        int filtered_value = 0;
         for (uint8_t i = 0; i < NUM_CHANNEL; i++)
         {
-            TeenyMidi.sendCCHires(SampleFilter_get(&filter_samp[i]), (4*i)+1);
+            filtered_value = SampleFilter_get(&filter_samp[i]);
+            //TeenyMidi.sendCCHires(filtered_value, (4*i)+1);
+
+
+
+                if (filtered_value >= 160)
+                    {
+                        if (note_off[i] == 1)
+                            {
+                                TeenyMidi.send(MIDI_NOTEON,i, 127 );
+                                note_off[i] = 0;
+                            }
+                    }
+                else
+                    {
+                        if (note_off[i] == 0)
+                            {
+                                TeenyMidi.send(MIDI_NOTEOFF,i,127);
+                                note_off[i] = 1;
+                            }
+                    }
+
+
         }
         previousMillis = millis();
     }
@@ -115,8 +141,10 @@ void loop()
 
   TeenyMidi.delay(3);
 
-   // velocityValue = value-prevValue;
-   // prevValue = value;
+
+
+//    velocityValue[pin_queue] = value[pin_queue]-prevValue[pin_queue];
+//    prevValue[pin_queue] = value[pin_queue];
 
 
 }
