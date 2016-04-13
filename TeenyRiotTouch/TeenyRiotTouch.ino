@@ -220,15 +220,16 @@ void setup()
 void loop()
 {
 
-    if (millis()-previousMillis >= 16)  {             // every 500 miliseconds = 2 times per second
-
+    if (millis()-previousMillis >= 16)  {  // 0% data loss
         //TeenyMidi.sendCCHires(value, 1);
         TeenyMidi.sendCCHires(SampleFilter_get(&filter_samp), 1);
-           previousMillis = millis();
+        previousMillis = millis();
     }
 
+  //sample 8 times -> good -> sometimes usb disconnect
+  // sample 6 times -> good -> still testing
+  value = TeenyTouchDusjagr.sense(PB4,PB3, 6 ) -offset_adc;
 
-  value = TeenyTouchDusjagr.sense(PB4,PB3, 8 ) -offset_adc;
   if (value > 0) SampleFilter_put(&filter_samp, value);
 
   TeenyMidi.delay(4);
