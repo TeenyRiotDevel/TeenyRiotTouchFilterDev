@@ -1,21 +1,19 @@
 #include "SampleFilter.h"
 
 static int filter_taps[SAMPLEFILTER_TAP_NUM] = {
-  14,
-  25,
-  45,
-  67,
-  91,
-  111,
-  125,
-  130,
-  125,
-  111,
-  91,
-  67,
-  45,
-  25,
-  14
+  4,
+  21,
+  49,
+  90,
+  134,
+  168,
+  181,
+  168,
+  134,
+  90,
+  49,
+  21,
+  4
 };
 
 void SampleFilter_init(SampleFilter* f) {

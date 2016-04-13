@@ -15,14 +15,14 @@ fixed point precision: 10 bits
   desired ripple = 5 dB
   actual ripple = n/a
 
-* 15 Hz - 60 Hz
+* 22 Hz - 60 Hz
   gain = 0
   desired attenuation = -40 dB
   actual attenuation = n/a
 
 */
 
-#define SAMPLEFILTER_TAP_NUM 15
+#define SAMPLEFILTER_TAP_NUM 13
 
 typedef struct {
   int history[SAMPLEFILTER_TAP_NUM];
