@@ -27,6 +27,7 @@ int value[8] = {0,0,0,0,0,0,0,0};
 uint16_t offset_adc[8] = {0,0,0,0,0,0,0,0};
 SampleFilter filter_samp[8];
 
+uint8_t pin_queue = 0;
 
 uint8_t multiplexer_mapping[8]  = {6,7,6,4,3,0,1,2}; //remap multiplexer pin
 
@@ -63,7 +64,7 @@ void setup()
 
     TeenyTouchDusjagr.begin();
     TeenyTouchDusjagr.setAdcSpeed(5);
-    TeenyTouchDusjagr.delay = 8;
+    TeenyTouchDusjagr.delay = 4;
     //TeenyTouchDusjagr.delay_cb = &delay;
     TeenyTouchDusjagr.usb_poll = &usb_poll;
 
@@ -101,15 +102,16 @@ void loop()
 
   //sample 8 times -> good -> sometimes usb disconnect
   // sample 6 times -> good -> still testing
-  for (uint8_t i = 0; i < NUM_CHANNEL; i++)
-  {
-      setAnalogMultiplexCh(i);
-      value[i] = TeenyTouchDusjagr.sense(PB4,PB3, 6 ) - offset_adc[i];
-      if (value[i] > 0) SampleFilter_put(&filter_samp[i], value[i]);
+  //for (uint8_t i = 0; i < NUM_CHANNEL; i++)
+  //{
+      setAnalogMultiplexCh(pin_queue);
+      value[pin_queue] = TeenyTouchDusjagr.sense(PB4,PB3, 1 ) - offset_adc[pin_queue];
+      if (value[pin_queue] > 0) SampleFilter_put(&filter_samp[pin_queue], value[pin_queue]);
       TeenyMidi.update();
-  }
+  //}
 
-
+  pin_queue++;
+  if (pin_queue > NUM_CHANNEL) pin_queue = 0;
 
   TeenyMidi.delay(4);
 
