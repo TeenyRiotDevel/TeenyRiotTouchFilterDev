@@ -190,6 +190,7 @@ uint8_t readCapacitivePin(uint8_t adcPin) {
 
 void setup()
 {
+    SampleFilter_init(&filter_samp);
 
     TeenyMidi.init();
 
@@ -210,98 +211,26 @@ void setup()
     setAnalogMultiplexCh(2);
 
     TeenyMidi.delay(500);
-    SampleFilter_init(&filter_samp);
 }
 
 
 void loop()
 {
-//    int total;
-//    //unsigned long ms;
 
-  unsigned long currentMillis = millis();
+    if (millis()-previousMillis >= 16)  {             // every 500 miliseconds = 2 times per second
 
-  if(currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
-    previousMillis = currentMillis;
-
-    if (TeenyMidi.read(&midimsg)) {                                    // need to put the ampersand "&" before "message"
-        if (midimsg.key == 2) //touch ADCSRA
-        {
-            TeenyTouchDusjagr.setAdcSpeed(midimsg.value);
-        }
-        if (midimsg.key == 3) //touch delay
-        {
-            TeenyTouchDusjagr.delay = midimsg.value;
-        }
+        TeenyMidi.sendCCHires(SampleFilter_get(&filter_samp), 1);
+           previousMillis = millis();
     }
-//    TeenyMidi.sendCCHires(value, 1);
-  //  TeenyMidi.sendCCHires(value, 1);
-    TeenyMidi.sendCCHires(SampleFilter_get(&filter_samp), 1);
-   // TeenyMidi.delay(1);
-   // wait_for_tick();
-   // TeenyMidi.update();
-    //velocityValue = value-prevValue;
-    //prevValue = value;
-//TeenyMidi.update();
 
-  }
-
-
-    //wait_for_tick();
-    ///ms = millis();
-    ///
-  setAnalogMultiplexCh(2);
 
   value = TeenyTouchDusjagr.sense(PB4,PB3, 1 );
   SampleFilter_put(&filter_samp, value);
 
-  //value = filterx.step(TeenyTouchDusjagr.sense(PB4,PB3, 29 ));
-  TeenyMidi.delay(8);
+  TeenyMidi.delay(4);
 
-
-   //TeenyMidi.sendCCHires(value, 1);
-
-    //value = readCapacitivePin(PB4);
-    //value = TeenyTouchDusjagr.sense(PB4,PB3, 29);
-    //ms = millis() - ms;
-
-//    wait_for_tick();
-//    total = TeenyTouchDusjagr.sense(PB4,PB3, 1);
-//   wait_for_five_ticks();
-//   total += TeenyTouchDusjagr.sense(PB4,PB3, 1);
-//   wait_for_five_ticks();
-//   total += TeenyTouchDusjagr.sense(PB4,PB3, 1);
-//   wait_for_five_ticks();
-//   total += TeenyTouchDusjagr.sense(PB4,PB3, 1);
-
-//ms = micros() - ms;
-//    wait_for_tick();
-//    total = analogRead(2);
-//    wait_for_five_ticks();
-//    total += analogRead(2);
-//    wait_for_five_ticks();
-//    total += analogRead(2);
-//    wait_for_five_ticks();
-//    total += analogRead(2);
-
- //   total  /= 4;
-
-
-    //TeenyMidi.sendCCHires(velocityValue, 1);
-    //TeenyMidi.sendCCHires((int)ms, 1);
-    //TeenyMidi.sendCCHires((int)test.step(value), 5);
-
-
-
-
-//    mic
-//    value = TeenyTouchDusjagr.sense(PB4,PB2, samples);
 //    velocityValue = value-prevValue;
 //    prevValue = value;
-//    analogWrite(PB0, velocityValue);
-//    TeenyMidi.sendCCHires(velocityValue, 5);
-
 
 
 }

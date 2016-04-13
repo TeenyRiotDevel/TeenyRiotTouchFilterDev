@@ -248,7 +248,7 @@ uint16_t TeenyTouchDusjagrClass::sense(byte adcPin, byte refPin, uint8_t samples
             //PORTB &= ~(1<<adcPin);
             DDRB |= (1<<adcPin) | (1<<refPin); // both output: adcPin low, S/H (ADC0) high
 
-            delayMicroseconds(this->delay);
+            delayMicroseconds(1);
             PORTB &= ~((1<<adcPin) | (1<<refPin)); // ... and low: Tristate
 
             DDRB &= ~((1<<adcPin) | (1<<refPin)); // set pins to Input...
