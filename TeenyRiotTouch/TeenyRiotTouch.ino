@@ -113,7 +113,7 @@ void loop()
   pin_queue++;
   if (pin_queue > NUM_CHANNEL) pin_queue = 0;
 
-  TeenyMidi.delay(4);
+  TeenyMidi.delay(3);
 
    // velocityValue = value-prevValue;
    // prevValue = value;
