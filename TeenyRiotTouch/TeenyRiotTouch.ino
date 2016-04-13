@@ -44,6 +44,8 @@ uint8_t multiplexer_mapping[8]  = {5,7,6,4,3,0,1,2}; //remap multiplexer pin
 unsigned long previousMillis = 0;        // will store last time LED was updated
 const uint8_t interval = 16;           // interval at which to blink (milliseconds)
 
+uint16_t offset_adc = 0;
+
 SampleFilter filter_samp;
 
 //class filter
@@ -195,7 +197,7 @@ void setup()
     TeenyMidi.init();
 
     TeenyTouchDusjagr.begin();
-    TeenyTouchDusjagr.setAdcSpeed(4);
+    TeenyTouchDusjagr.setAdcSpeed(5);
     TeenyTouchDusjagr.delay = 8;
     TeenyTouchDusjagr.delay_cb = &delay;
     TeenyTouchDusjagr.usb_poll = &usb_poll;
@@ -209,6 +211,7 @@ void setup()
 
     pinMode(PB0, OUTPUT);
     setAnalogMultiplexCh(2);
+    offset_adc = TeenyTouchDusjagr.sense(PB4,PB3, 8 );
 
     TeenyMidi.delay(500);
 }
@@ -219,18 +222,19 @@ void loop()
 
     if (millis()-previousMillis >= 16)  {             // every 500 miliseconds = 2 times per second
 
+        //TeenyMidi.sendCCHires(value, 1);
         TeenyMidi.sendCCHires(SampleFilter_get(&filter_samp), 1);
            previousMillis = millis();
     }
 
 
-  value = TeenyTouchDusjagr.sense(PB4,PB3, 1 );
-  SampleFilter_put(&filter_samp, value);
+  value = TeenyTouchDusjagr.sense(PB4,PB3, 8 ) -offset_adc;
+  if (value > 0) SampleFilter_put(&filter_samp, value);
 
   TeenyMidi.delay(4);
 
-//    velocityValue = value-prevValue;
-//    prevValue = value;
+   // velocityValue = value-prevValue;
+   // prevValue = value;
 
 
 }

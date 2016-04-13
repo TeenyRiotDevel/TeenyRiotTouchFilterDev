@@ -241,6 +241,7 @@ uint16_t TeenyTouchDusjagrClass::sense(byte adcPin, byte refPin, uint8_t samples
 
     for(int _counter = 0; _counter < samples; _counter ++)
         {
+            this->usb_poll();
             // first measurement: adcPin low, S/H high
             ADMUX = (0<<REFS0) | (muxRef); // set ADC sample+hold condenser to the free A0 (ADC0)
             //delayMicroseconds(QTouchDelay);
@@ -248,7 +249,7 @@ uint16_t TeenyTouchDusjagrClass::sense(byte adcPin, byte refPin, uint8_t samples
             //PORTB &= ~(1<<adcPin);
             DDRB |= (1<<adcPin) | (1<<refPin); // both output: adcPin low, S/H (ADC0) high
 
-            delayMicroseconds(1);
+            delayMicroseconds(this->delay);
             PORTB &= ~((1<<adcPin) | (1<<refPin)); // ... and low: Tristate
 
             DDRB &= ~((1<<adcPin) | (1<<refPin)); // set pins to Input...
