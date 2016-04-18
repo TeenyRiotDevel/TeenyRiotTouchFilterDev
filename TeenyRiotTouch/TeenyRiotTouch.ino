@@ -32,13 +32,13 @@ SampleFilter filter_samp[8];
 
 uint8_t pin_queue = 0;
 
-uint8_t multiplexer_mapping[8]  = {6,7,6,4,3,0,1,2}; //remap multiplexer pin
+uint8_t multiplexer_mapping[8]  = {6,7,4,4,3,0,1,2}; //remap multiplexer pin
 
 unsigned long previousMillis = 0;        // will store last time LED was updated
 
 
 #define PIN_SELECT 0
-#define NUM_CHANNEL 2
+#define NUM_CHANNEL 3
 
 void setAnalogMultiplexCh(const uint8_t _pin_index)
 {
@@ -66,7 +66,7 @@ void setup()
     TeenyMidi.init();
 
     TeenyTouchDusjagr.begin();
-    TeenyTouchDusjagr.setAdcSpeed(5);
+    TeenyTouchDusjagr.setAdcSpeed(4);
     TeenyTouchDusjagr.delay = 4;
     //TeenyTouchDusjagr.delay_cb = &delay;
     TeenyTouchDusjagr.usb_poll = &usb_poll;
@@ -94,7 +94,7 @@ void setup()
 void loop()
 {
 
-    if (millis()-previousMillis >= 16)  {  // 0% data loss
+    if (millis()-previousMillis >= 5)  {  // 0% data loss
         //TeenyMidi.sendCCHires(value, 1);
         int filtered_value = 0;
         for (uint8_t i = 0; i < NUM_CHANNEL; i++)
@@ -104,7 +104,7 @@ void loop()
 
 
 
-                if (filtered_value >= 160)
+                if (filtered_value >= 100)
                     {
                         if (note_off[i] == 1)
                             {
@@ -116,7 +116,7 @@ void loop()
                     {
                         if (note_off[i] == 0)
                             {
-                                TeenyMidi.send(MIDI_NOTEOFF,i,127);
+                                //TeenyMidi.send(MIDI_NOTEOFF,i,127);
                                 note_off[i] = 1;
                             }
                     }
@@ -139,7 +139,7 @@ void loop()
   pin_queue++;
   if (pin_queue > NUM_CHANNEL) pin_queue = 0;
 
-  TeenyMidi.delay(3);
+  TeenyMidi.delay(1);
 
 
 
