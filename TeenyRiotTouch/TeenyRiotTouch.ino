@@ -84,10 +84,10 @@ void setup()
     {
         setAnalogMultiplexCh(i);
         offset_adc[i] = TeenyTouchDusjagr.sense(PB4,PB3, 8 );
+        TeenyMidi.delay(100);
     }
 
 
-    TeenyMidi.delay(500);
 }
 
 
