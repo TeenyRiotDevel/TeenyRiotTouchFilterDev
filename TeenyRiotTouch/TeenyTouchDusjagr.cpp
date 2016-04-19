@@ -111,14 +111,18 @@ uint16_t TeenyTouchDusjagrClass::touchPin(uint8_t adcPin, uint8_t samples)
 
         // start conversion (just to discharge sampling hold cap)
         ADCSRA |= (1<<ADSC);
-        while (!(ADCSRA & (1 << ADIF))); // wait for conversion complete
+        while (!(ADCSRA & (1 << ADIF))){
+            this->usb_poll();
+        }; // wait for conversion complete
         ADCSRA |= (1 << ADIF); // clear ADIF
 
         ADMUX = MUX_REF_VCC | muxAdc;
 
         // start conversion to get the cap value
         ADCSRA |= (1<<ADSC);
-        while (!(ADCSRA & (1 << ADIF))); // wait for conversion complete
+        while (!(ADCSRA & (1 << ADIF))){
+         this->usb_poll();
+        }; // wait for conversion complete
         ADCSRA |= (1 << ADIF); // clear ADIF
         retval +=  ADC;
     }
